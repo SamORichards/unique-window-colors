@@ -11,43 +11,6 @@ interface ColorsInterface {
   titleBarColor_light: Color;
 }
 
-export class SettingsFileDeleter {
-  constructor(
-    private workspaceRoot: string,
-    private colors: ColorsInterface) { }
-
-  /** 
-   * Deletes .vscode/settings.json if colors all match either the default light or dark Windows Colors and if no other settings exist.
-   * 
-   * Deletes .vscode if no other files exist.
-   */
-  public dispose() {
-
-    const settingsfile = this.workspaceRoot + '/.vscode/settings.json';
-    const vscodeSettingsDir = this.workspaceRoot + '/.vscode';
-    const settingsFileJson = JSON.parse((fs.readFileSync(settingsfile, "utf8")));
-    const cc = JSON.parse(JSON.stringify(workspace.getConfiguration('workbench').get('colorCustomizations')));
-
-    const deleteSettingsFileUponExit = JSON.parse(JSON.stringify(workspace.getConfiguration('windowColors').get<string>('🌈 DeleteSettingsFileUponExit')));
-
-    if (deleteSettingsFileUponExit) {
-      fs.unlinkSync(settingsfile);
-      fs.rmdirSync(vscodeSettingsDir);  //only deletes empty folders
-    }
-    else if (Object.keys(settingsFileJson).length === 1 && Object.keys(cc).length === 3) {
-
-      const aColorWasModified =
-        (cc['activityBar.background'] !== this.colors.sideBarColor_dark.hex() && cc['activityBar.background'] !== this.colors.sideBarColor_light.hex()) ||
-        (cc['titleBar.activeBackground'] !== this.colors.titleBarColor_dark.hex() && cc['titleBar.activeBackground'] !== this.colors.titleBarColor_light.hex()) ||
-        (cc['titleBar.activeForeground'] !== this.colors.titleBarTextColor_dark.hex() && cc['titleBar.activeForeground'] !== this.colors.titleBarTextColor_light.hex());
-
-      if (!aColorWasModified) {
-        fs.unlinkSync(settingsfile);
-        fs.rmdirSync(vscodeSettingsDir);  //only deletes empty folders
-      }
-    }
-  }
-}
 
 export function activate(context: ExtensionContext) {
 
@@ -108,7 +71,6 @@ export function activate(context: ExtensionContext) {
     }
   }
 
-  const doRemoveColors = extensionTheme === 'remove';
 
   let doUpdateColors = true;
 
@@ -121,12 +83,12 @@ export function activate(context: ExtensionContext) {
     doUpdateColors = true;
   }
 
-  if (doUpdateColors || doRemoveColors) {
+  if (doUpdateColors) {
 
     const newColors = {
-      "activityBar.background": doRemoveColors ? undefined : sideBarColor.hex(),
-      "titleBar.activeBackground": doRemoveColors ? undefined : titleBarColor.hex(),
-      "titleBar.activeForeground": doRemoveColors ? undefined : titleBarTextColor.hex(),
+      "activityBar.background": sideBarColor.hex(),
+      "titleBar.activeBackground":  titleBarColor.hex(),
+      "titleBar.activeForeground": titleBarTextColor.hex(),
       //these lines are for development since the extension demo doesn't show the formatted title bar
       // "sideBarSectionHeader.background": titleBarColor.hex(),
       // "sideBarSectionHeader.foreground": titleBarTextColor.hex()
@@ -134,12 +96,6 @@ export function activate(context: ExtensionContext) {
     workspace.getConfiguration('workbench').update('colorCustomizations', { ...cc, ...newColors }, false);
   }
 
-  const settingsFileDeleter =
-    new SettingsFileDeleter(
-      workspaceRoot,
-      { sideBarColor_dark, titleBarTextColor_dark, titleBarColor_dark, sideBarColor_light, titleBarTextColor_light, titleBarColor_light });
-
-  context.subscriptions.push(settingsFileDeleter);
 
   // for testing
   // setTimeout(() => {
