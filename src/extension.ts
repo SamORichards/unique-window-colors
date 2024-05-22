@@ -1,15 +1,6 @@
 import * as Color from 'color';
-import * as fs from 'fs';
 import { ExtensionContext, workspace, WorkspaceFolder } from 'vscode';
 
-interface ColorsInterface {
-  sideBarColor_dark: Color;
-  titleBarTextColor_dark: Color;
-  titleBarColor_dark: Color;
-  sideBarColor_light: Color;
-  titleBarTextColor_light: Color;
-  titleBarColor_light: Color;
-}
 
 
 export function activate(context: ExtensionContext) {
@@ -23,7 +14,7 @@ export function activate(context: ExtensionContext) {
     return;
   }
 
-  let workspaceRoot: string = getWorkspaceFolder(workspace.workspaceFolders);
+  let workspaceRoot: string = getWorkspaceFolder(Array.from(workspace.workspaceFolders));
 
   const extensionTheme = workspace.getConfiguration('windowColors').get<string>('🌈 Theme');
   let baseColor = workspace.getConfiguration('windowColors').get<string>('🌈 BaseColor');
