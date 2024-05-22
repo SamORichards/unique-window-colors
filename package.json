@@ -1,15 +1,15 @@
 {
   "name": "unique-window-colors",
-  "displayName": "Window Colors",
+  "displayName": "Window Colors (NO DELETE)",
   "description": "Automatically adds a unique color to each window's activityBar and titleBar.",
   "icon": "img/icon_602.png",
   "version": "1.0.50",
-  "publisher": "stuart",
+  "publisher": "sam",
   "author": {
-    "name": "Stuart Robinson"
+    "name": "Sam Richards - Stuart Robinson"
   },
   "engines": {
-    "vscode": "^1.20.0"
+    "vscode": "^1.60.0"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
   "activationEvents": [
     "*"
   ],
-  "main": "./out/extension",
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
@@ -50,11 +50,11 @@
             "remove"
           ],
           "enumDescriptions": [
-            "Applies a dark-themed color to the activityBar and titleBar.  First 'remove' and reload VSCode for changes to take effect. ",
-            "Applies a light-themed color to the activityBar and titleBar.  First 'remove' and reload VSCode for changes to take effect. ",
+            "Applies a dark-themed color to the activityBar and titleBar.  First 'remove' and reload VSCode for changes to take effect.",
+            "Applies a light-themed color to the activityBar and titleBar.  First 'remove' and reload VSCode for changes to take effect.",
             "Removes the modified color settings from .vscode/settings.json"
           ],
-          "description": "Controls the color shades to blend with dark or light themes.  To switch betwen light and dark, you must first select 'remove' and reload VSCode to remove the settings, because they are not automatically overwritten.  This lets you modify the selected colors if you don't like what the extension picks.  \n\nReload the window for this to take effect (cmd-⇧-P, 'Reload Window')"
+          "description": "Controls the color shades to blend with dark or light themes. To switch between light and dark, you must first select 'remove' and reload VSCode to remove the settings, because they are not automatically overwritten. This lets you modify the selected colors if you don't like what the extension picks.\n\nReload the window for this to take effect (cmd-⇧-P, 'Reload Window')"
         },
         "windowColors.🌈 BaseColor": {
           "type": "string",
@@ -67,18 +67,18 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.42",
-    "@types/node": "^8.10.25",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
+    "@types/mocha": "^10.0.0",
+    "@types/node": "^14.14.37",
+    "@types/vscode": "^1.60.0",
+    "tslint": "^6.1.3",
+    "typescript": "^4.3.2",
+    "vscode-test": "^1.5.2"
   },
   "dependencies": {
     "@types/color": "^3.0.0",
-    "@types/vscode": "^1.89.0",
     "color": "^3.1.0"
   }
 }
